@@ -5,7 +5,7 @@ resource "aws_iam_role" "lambda_role" {
 
 resource "aws_lambda_function" "default" {
   count                          = "${length(var.lambda_variables)}"
-  function_name                  = "${var.base_name}-${lookup(var.lambda_variables[count.index],"name")}"
+  function_name                  = "${var.base_name}-${lookup(var.lambda_variables[count.index],"name")}-${var.environment}"
   handler                        = "${lookup(var.lambda_variables[count.index],"function_handler")}"
   role                           = "${aws_iam_role.lambda_role.arn}"
   description                    = "Lambda function for ${var.app_name} application in ${var.environment}."
