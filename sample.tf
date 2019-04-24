@@ -24,7 +24,7 @@ resource "aws_iam_role_policy" "stepfunction_policy" {
   policy = "${file("${path.module}/policies/stepfunction-role-policy.json")}"
 }
 
-resource "aws_lambda_function" "default" {
+resource "aws_lambda_function" "sample_lambda" {
   count                          = "${length(var.lambda_variables)}"
   function_name                  = "${lookup(var.lambda_variables[count.index],"name")}-${var.environment}"
   handler                        = "${lookup(var.lambda_variables[count.index],"function_handler")}"
@@ -36,6 +36,21 @@ resource "aws_lambda_function" "default" {
   publish                        = "${lookup(var.lambda_variables[count.index],"lambda_publish")}"
   reserved_concurrent_executions = "${lookup(var.lambda_variables[count.index],"reserved_concurrent_executions")}"
   filename         				 = "${path.module}/artifacts/${lookup(var.lambda_variables[count.index],"name")}.zip"
+  tags 							 = {
+   	environment = "${var.environment}"
+  }
+  environment {
+    variables = {
+      region = "${var.region}"
+    }
+  }
+}
+
+resource "aws_lambda_alias" "dark_alias" {
+  name        = "DARK"
+  description = "DARK alias"
+  function_name = "{aws_lambda_function.sample_lambda.arn}"
+  function_version = "$LATEST"
 }
 
 data "template_file" "sfn_state_machine_data" {
