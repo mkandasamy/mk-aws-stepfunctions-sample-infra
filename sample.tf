@@ -65,7 +65,7 @@ data "template_file" "sfn_state_machine_data" {
 }
 
 resource "aws_sfn_state_machine" "sfn_state_machine" {
-  name     = "${var.stepfunction_name}"
+  name     = "${var.stepfunction_name}-${var.environment}"
   role_arn = "${aws_iam_role.stepfunction_role.arn}"
 
   definition = "${data.template_file.sfn_state_machine_data.rendered}"
