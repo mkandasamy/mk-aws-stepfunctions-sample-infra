@@ -49,8 +49,9 @@ resource "aws_lambda_function" "sample_lambda" {
 resource "aws_lambda_alias" "dark_alias" {
   name        = "DARK"
   description = "DARK alias"
-  function_name = "{aws_lambda_function.sample_lambda.arn}"
+  function_name = "arn:aws:lambda:${var.region}:${var.account_id}:function:${lookup(var.lambda_variables[count.index],"name")}-${var.environment}"
   function_version = "$LATEST"
+  depends_on = ["aws_lambda_function.sample_lambda"]
 }
 
 data "template_file" "sfn_state_machine_data" {
