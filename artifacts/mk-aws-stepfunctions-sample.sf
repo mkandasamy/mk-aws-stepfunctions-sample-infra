@@ -5,12 +5,6 @@
         
         "ConfigureCount": {
             "Type": "Pass",
-            "Result": {
-                "count": 10,
-                "index": 0,
-                "step": 1
-            },
-            "ResultPath": "$.iterator",
             "Next": "Iterator"
         },
         "Iterator": {
@@ -25,11 +19,16 @@
                 {
                     "Variable": "$.iterator.continue",
                     "BooleanEquals": true,
-                    "Next": "ExampleWork"
+                    "Next": "Wait10Seconds"
                 }
             ],
             "Default": "Done"
         },
+        "Wait10Seconds": {
+		  "Type": "Wait",
+		  "Seconds": 10,
+		  "Next": "ExampleWork"
+		},
         "ExampleWork": {
             "Comment": "Your application logic, to run a specific number of times",
             "Type": "Pass",
