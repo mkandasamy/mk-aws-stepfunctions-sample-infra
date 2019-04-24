@@ -1,5 +1,5 @@
 app_name		 		= "mk-aws-stepfunctions-sample"
-environment		 		= "latest"
+environment		 		= "production"
 region					= "us-east-2"
 account_id				= "203532026745"
 lambda_role_name 		= "mk-aws-stepfunctions-sample-lambda-role"
