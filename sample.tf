@@ -7,10 +7,9 @@ resource "aws_iam_role" "lambda_role" {
   assume_role_policy = "${file("${path.module}/policies/lambda-role.json")}"
 }
 
-resource "aws_iam_role" "lambda_policy" {
+resource "aws_iam_role_policy" "lambda_policy" {
   name = "${var.lambda_role_name}-policy"
   role = "${aws_iam_role.lambda_role.id}"
-
   policy = "${file("${path.module}/policies/lambda-role-policy.json")}"
 }
 
