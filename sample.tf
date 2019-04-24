@@ -18,5 +18,5 @@ resource "aws_lambda_function" "default" {
   timeout                        = "${lookup(var.lambda_variables[count.index],"lambda_timeout")}"
   publish                        = "${lookup(var.lambda_variables[count.index],"lambda_publish")}"
   reserved_concurrent_executions = "${lookup(var.lambda_variables[count.index],"reserved_concurrent_executions")}"
-  filename         				 = "${path.module}/artifacts/${lookup(var.lambda_variables[count.index],"name")}.zip""
+  filename         				 = "${path.module}/artifacts/${lookup(var.lambda_variables[count.index],"name")}.zip"
 }
