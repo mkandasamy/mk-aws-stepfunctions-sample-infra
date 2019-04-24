@@ -1,0 +1,18 @@
+resource "aws_iam_role" "lambda_role" {
+  name = "${var.lambda_role_name}"
+  assume_role_policy = "${file("${path.module}/policies/lambda-role.json")}"
+}
+
+resource "aws_lambda_function" "default" {
+  count                          = "${length(var.lambda_variables)}"
+  function_name                  = "${var.base_name}-${lookup(var.lambda_variables[count.index],"name")}"
+  handler                        = "${lookup(var.lambda_variables[count.index],"function_handler")}"
+  role                           = "${aws_iam_role.lambda_role.arn}"
+  description                    = "Lambda function for ${var.app_name} application in ${var.environment}."
+  runtime                        = "${lookup(var.lambda_variables[count.index],"lambda_runtime")}"
+  memory_size                    = "${lookup(var.lambda_variables[count.index],"lambda_memory_size")}"
+  timeout                        = "${lookup(var.lambda_variables[count.index],"lambda_timeout")}"
+  publish                        = "${lookup(var.lambda_variables[count.index],"lambda_publish")}"
+  reserved_concurrent_executions = "${lookup(var.lambda_variables[count.index],"reserved_concurrent_executions")}"
+  source_code_hash 				 = "${base64sha256(file("${path.module}/artifacts/${var.app_name}.zip"))}"
+}
