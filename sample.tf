@@ -7,6 +7,13 @@ resource "aws_iam_role" "lambda_role" {
   assume_role_policy = "${file("${path.module}/policies/lambda-role.json")}"
 }
 
+resource "aws_iam_role" "lambda_policy" {
+  name = "${var.lambda_role_name}-policy"
+  role = "${aws_iam_role.lambda_role.id}"
+
+  policy = "${file("${path.module}/policies/lambda-role-policy.json")}"
+}
+
 resource "aws_lambda_function" "default" {
   count                          = "${length(var.lambda_variables)}"
   function_name                  = "${lookup(var.lambda_variables[count.index],"name")}-${var.environment}"
